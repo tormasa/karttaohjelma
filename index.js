@@ -44,7 +44,7 @@ point1.setStyle(
     new Style({
         image: new Icon({
             color: 'rgba(255, 0, 0, 0.5)',
-            src: 'data/icon.png',
+            src: 'icon.png',
             scale: 0.05,
         }),
     })
