@@ -10,88 +10,53 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import OSM from 'ol/source/OSM';
 import {fromLonLat} from 'ol/proj';
 
-var point1 = new Feature({
-    geometry: new Point(fromLonLat([25.472, 65.014])),
-    name: 'Paikka 1',
-    description: 'Tämä on paikka',
-});
+class Paikka {
+    constructor(leveys, pituus, nimi, kuvaus) {
+        this.leveys = leveys;
+        this.pituus = pituus;
+        this.nimi = nimi;
+        this.kuvaus = kuvaus;
+    }
+}
 
-var point2 = new Feature({
-    geometry: new Point(fromLonLat([25.462, 65.004])),
-    name: 'Paikka 2',
-    description: 'Tämä on paikka',
-});
+var paikat = [
+    new Paikka(25.472, 65.014, "Paikka 1", "Tämä on paikka 1"),
+    new Paikka(25.462, 65.004, "Paikka 2", "Tämä on paikka 2"),
+    new Paikka(25.462, 65.024, "Paikka 3", "Tämä on paikka 3"),
+    new Paikka(25.482, 65.004, "Paikka 4", "Tämä on paikka 4"),
+    new Paikka(25.482, 65.024, "Paikka 5", "Tämä on paikka 5")
+]
+var colors = [
+    "rgba(255, 0, 0, 0.5)",
+    "rgba(255, 255, 0, 0.5)",
+    "rgba(255, 0, 255, 0.5)",
+    "rgba(0, 255, 255, 0.5)",
+    "rgba(0, 255, 0, 0.5)"
+]
+var pointit = [];
 
-var point3 = new Feature({
-    geometry: new Point(fromLonLat([25.462, 65.024])),
-    name: 'Paikka 3',
-    description: 'Tämä on paikka',
-});
+for (var i = 0; i < paikat.length; i++) {
+    var point = new Feature({
+        geometry: new Point(fromLonLat([paikat[i].leveys, paikat[i].pituus])),
+        name: paikat[i].nimi,
+        description: paikat[i].kuvaus,
+    });
 
-var point4 = new Feature({
-    geometry: new Point(fromLonLat([25.482, 65.024])),
-    name: 'Paikka 4',
-    description: 'Tämä on paikka',
-});
+    point.setStyle(
+        new Style({
+            image: new Icon({
+                color: colors[i],
+                src: 'data/icon.png',
+                scale: 0.05,
+            }),
+        })
+    );
 
-var point5 = new Feature({
-    geometry: new Point(fromLonLat([25.482, 65.004])),
-    name: 'Paikka 5',
-    description: 'Tämä on paikka',
-});
-
-point1.setStyle(
-    new Style({
-        image: new Icon({
-            color: 'rgba(255, 0, 0, 0.5)',
-            src: 'data/icon.png',
-            scale: 0.05,
-        }),
-    })
-);
-
-point2.setStyle(
-    new Style({
-        image: new Icon({
-            color: 'rgba(255, 255, 0, 0.5)',
-            src: 'data/icon.png',
-            scale: 0.05,
-        }),
-    })
-);
-
-point3.setStyle(
-    new Style({
-        image: new Icon({
-            color: 'rgba(255, 0, 255, 0.5)',
-            src: 'data/icon.png',
-            scale: 0.05,
-        }),
-    })
-);
-
-point4.setStyle(
-    new Style({
-        image: new Icon({
-            color: 'rgba(0, 255, 255, 0.5)',
-            src: 'data/icon.png',
-            scale: 0.05,
-        }),
-    })
-);
-
-point5.setStyle(
-    new Style({
-        image: new Icon({
-            color: 'rgba(0, 255, 0, 0.5)',
-            src: 'data/icon.png',
-            scale: 0.05,
-        }),
-    })
-);
+    pointit.push(point);
+}
 
 var vectorSource = new VectorSource({
-    features: [point1, point2, point3, point4, point5],
+    features: pointit,
 });
 
 var vectorLayer = new VectorLayer({
@@ -102,13 +67,18 @@ var tileLayer = new TileLayer({
     source: new OSM()
 });
 
+var defaultView = new View({
+    center: fromLonLat([25.472, 65.014]),
+    zoom: 12,
+});
+
 var map = new Map({
     layers: [tileLayer, vectorLayer],
     target: document.getElementById('map'),
     view: new View({
-        center: fromLonLat([25.472, 65.014]),
-        zoom: 12,
-    }),
+        center: defaultView.getCenter(),
+        zoom: defaultView.getZoom(),
+    })
 });
 
 var element = document.getElementById('popup');
@@ -134,11 +104,13 @@ map.on('click', function (evt) {
 
         var coordinates = feature.getGeometry().getCoordinates();
         popup.setPosition(coordinates);
+
         $(element).popover({
-        placement: 'top',
-        html: true,
-        content: feature.get('name') +": " +feature.get('description'),
+            placement: 'top',
+            html: true,
+            content: feature.get('name') +": " +feature.get('description'),
         });
+
         $(element).popover('show');
     } else {
         $(element).popover('dispose');
@@ -156,3 +128,24 @@ map.on('pointermove', function (e) {
     var hit = map.hasFeatureAtPixel(pixel);
     map.getTarget().style.cursor = hit ? 'pointer' : '';
 });
+
+var paikatButton = document.getElementById('paikatButton');
+var centerButton = document.getElementById('centerButton');
+var showMapButton = document.getElementById('showMap');
+
+paikatButton.addEventListener('click', function() {
+    document.getElementById("map").style.display = "none";
+    document.getElementById("kohteet").style.display = "block";
+}, false);
+
+centerButton.addEventListener('click', function() {
+    map.setView(new View({
+        center: defaultView.getCenter(),
+        zoom: defaultView.getZoom()
+    }));
+}, false);
+
+showMapButton.addEventListener('click', function() {
+    document.getElementById("map").style.display = "block";
+    document.getElementById("kohteet").style.display = "none";
+}, false);
