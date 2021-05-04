@@ -11,21 +11,24 @@ import OSM from 'ol/source/OSM';
 import {fromLonLat} from 'ol/proj';
 
 class Paikka {
-    constructor(leveys, pituus, nimi, kuvaus) {
+    constructor(leveys, pituus, nimi, kuvaus, icon) {
         this.leveys = leveys;
         this.pituus = pituus;
         this.nimi = nimi;
         this.kuvaus = kuvaus;
+        this.icon = 'data/' +icon +'.png';
     }
 }
 
 var paikat = [
-    new Paikka(25.472, 65.014, "Paikka 1", "Tämä on paikka 1"),
-    new Paikka(25.462, 65.004, "Paikka 2", "Tämä on paikka 2"),
-    new Paikka(25.462, 65.024, "Paikka 3", "Tämä on paikka 3"),
-    new Paikka(25.482, 65.004, "Paikka 4", "Tämä on paikka 4"),
-    new Paikka(25.482, 65.024, "Paikka 5", "Tämä on paikka 5")
+    new Paikka(25.472, 65.014, "Paikka 1", "Tämä on paikka 1", "asema"),
+    new Paikka(25.462, 65.004, "Paikka 2", "Tämä on paikka 2", "kirkko"),
+    new Paikka(25.462, 65.024, "Paikka 3", "Tämä on paikka 3", "oulu10"),
+    new Paikka(25.482, 65.004, "Paikka 4", "Tämä on paikka 4", "rotuaari"),
+    new Paikka(25.482, 65.024, "Paikka 5", "Tämä on paikka 5", "teatteri")
 ]
+
+/*
 var colors = [
     "rgba(255, 0, 0, 0.5)",
     "rgba(255, 255, 0, 0.5)",
@@ -33,6 +36,8 @@ var colors = [
     "rgba(0, 255, 255, 0.5)",
     "rgba(0, 255, 0, 0.5)"
 ]
+*/
+
 var pointit = [];
 
 for (var i = 0; i < paikat.length; i++) {
@@ -45,9 +50,9 @@ for (var i = 0; i < paikat.length; i++) {
     point.setStyle(
         new Style({
             image: new Icon({
-                color: colors[i],
-                src: 'data/icon.png',
-                scale: 0.05,
+                //color: colors[i],
+                src: paikat[i].icon,
+                scale: 0.1,
             }),
         })
     );
