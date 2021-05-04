@@ -21,11 +21,11 @@ class Paikka {
 }
 
 var paikat = [
-    new Paikka(25.472, 65.014, "Paikka 1", "Tämä on paikka 1", "asema"),
-    new Paikka(25.462, 65.004, "Paikka 2", "Tämä on paikka 2", "kirkko"),
-    new Paikka(25.462, 65.024, "Paikka 3", "Tämä on paikka 3", "oulu10"),
-    new Paikka(25.482, 65.004, "Paikka 4", "Tämä on paikka 4", "rotuaari"),
-    new Paikka(25.482, 65.024, "Paikka 5", "Tämä on paikka 5", "teatteri")
+    new Paikka(25.4839, 65.01138, "Paikka 1", "Tämä on paikka 1", "asema2"),
+    new Paikka(25.47534, 65.01484, "Paikka 2", "Tämä on paikka 2", "kirkko"),
+    new Paikka(25.47027, 65.01388, "Paikka 3", "Tämä on paikka 3", "oulu10"),
+    new Paikka(25.47129, 65.01231, "Paikka 4", "Tämä on paikka 4", "rotuaari"),
+    new Paikka(25.46268, 65.01463, "Paikka 5", "Tämä on paikka 5", "teatteri")
 ]
 
 /*
@@ -52,7 +52,7 @@ for (var i = 0; i < paikat.length; i++) {
             image: new Icon({
                 //color: colors[i],
                 src: paikat[i].icon,
-                scale: 0.1,
+                scale: 0.2,
             }),
         })
     );
@@ -73,8 +73,8 @@ var tileLayer = new TileLayer({
 });
 
 var defaultView = new View({
-    center: fromLonLat([25.472, 65.014]),
-    zoom: 12,
+    center: fromLonLat([25.473, 65.013]),
+    zoom: 15,
 });
 
 var map = new Map({
