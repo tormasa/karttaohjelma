@@ -23,6 +23,15 @@
                 margin-left: 15px;
                 margin-right: 15px;
             }
+            .esittely {
+                width: auto;
+                height: 400px;
+                margin: auto;
+                display: none;
+                background-color: rgb(41, 104, 163);
+                margin-left: 15px;
+                margin-right: 15px;
+            }
             body {
                 background-color: rgb(98, 146, 190);
             }
@@ -75,6 +84,25 @@
                 display: table;
                 clear: both;
             }
+            .kohteetRow {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            .kohteetRow:after{
+                content: "";
+                display: table;
+                clear: both;
+            }
+            .kohteetCol {
+                float: left;
+                width: 40%;
+                padding: 0px;
+            }
+            .kohteetButton {
+                background-color: rgb(41, 104, 163);
+                border: none;
+                color: white;
+            }
             @media screen and (max-width:1400px) {
                 .column {
                     width: 100%;
@@ -92,7 +120,18 @@
             <div class="column"></div>
             <div class="column">
                 <div id="map" class="map"><div id="popup"></div><div id="paikatPopup"></div></div>
-                <div id="kohteet" class="kohteet">Tähän kohteita lol</div>
+                <div id="kohteet" class="kohteet">
+                    <div class="kohteetRow" id="kohdeRivi">
+                        <div class="kohteetCol" id="kohdeNimi">
+                            <button class="kohteetButton" id="kohdeNimiButton"></button>
+                        </div>
+                        <div class="kohteetCol" id="kohdeSelite"></div>
+                    </div>
+                </div>
+                <div id="esittely" class="esittely">
+                    <h2 id="esittelyOtsikko">Kohteen esittely</h2>
+                    <p id="esittelyTeksti">Höpsön löpsön hissun kissun.</p>
+                </div>
             </div>
             <div class="column"></div>
         </div>

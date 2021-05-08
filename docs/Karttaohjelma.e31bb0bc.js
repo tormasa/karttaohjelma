@@ -85928,26 +85928,69 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Paikka = function Paikka(leveys, pituus, nimi, kuvaus, icon) {
+var Paikka = function Paikka(leveys, pituus, nimi, icon, lyhytKuvaus, kuvaus) {
   _classCallCheck(this, Paikka);
 
   this.leveys = leveys;
   this.pituus = pituus;
   this.nimi = nimi;
-  this.kuvaus = kuvaus;
   this.icon = 'data/' + icon + '.png';
+  this.lyhytKuvaus = lyhytKuvaus;
+  this.kuvaus = kuvaus;
 };
 
-var paikat = [new Paikka(25.4839, 65.01138, "Paikka 1", "Tämä on paikka 1", "asema2"), new Paikka(25.47534, 65.01484, "Paikka 2", "Tämä on paikka 2", "kirkko"), new Paikka(25.47027, 65.01388, "Paikka 3", "Tämä on paikka 3", "oulu10"), new Paikka(25.47129, 65.01231, "Paikka 4", "Tämä on paikka 4", "rotuaari"), new Paikka(25.46268, 65.01463, "Paikka 5", "Tämä on paikka 5", "teatteri")];
-/*
-var colors = [
-    "rgba(255, 0, 0, 0.5)",
-    "rgba(255, 255, 0, 0.5)",
-    "rgba(255, 0, 255, 0.5)",
-    "rgba(0, 255, 255, 0.5)",
-    "rgba(0, 255, 0, 0.5)"
-]
-*/
+var paikat = [new Paikka(25.4839, 65.01138, "Rautatieasema", "asema2", "Oulun rautatieasema", "Oulun rautatieasema sijaitsee Oulun keskustassa. Oulussa risteävät rataosat Seinäjoki-Oulu, Oulu-Kontiomäki sekä Oulu-Tornia. Oulun rautatieasemaa on myös sanottu Pohjois-Suomen tärkeimmäksi risteysasemaksi ja se on ainoa raideyhteys 65. leveyspiirin pohjoispuolelle.\n\nVuonna 2020 Oulussa lopetettiin lipunmyynti ja siirryttiin lippuautomaatteihin.\n\nKiitos rautatieaseman oululaiset opiskelijat voivat matkustaa helposti ja vaivattomasti."), new Paikka(25.47534, 65.01484, "Tuomiokirkko", "kirkko", "Oulun tuomiokirkko", "Oulun tuomiokirkko valmistui vuonna 1777 mutta se tuhoutui keväällä 1822 tulipalossa, jolloin sen puurakenteet tuhoutuivat. Pian tämän jälkeen kirkko rakennettiin uudelleen käyttäen arkkitehtuurin Carl Ludvig Engelin piirustuksia. Kirkko valmistui uudestaan 1832 ja torni 1845."), new Paikka(25.47027, 65.01388, "Oulu10", "oulu10", "Neuvontaa ja opastusta Oulun kaupungin palveluihin", "Oulu10 tarjoaa neuvontaa Oulun kaupungin palveluihin. Oulu10 voidaan tavoitella sähköpostin, puhelimitse tai Chatin välityksellä. Sen palveluihin kuulu, mutta ei rajoitu neuvonta ja ohjaus, lipunmyynti, tuotemyynti ja kaupungin lähettämien laskujen maksu.\n\nOulu10 avulla opiskelijat voivat hankkia huolettomasti ja helposti itselleen bussikortin, jotta he pääsevät matkaamaan Yliopistolle ja takaisin keskustaan."), new Paikka(25.47129, 65.01231, "Rotuaari", "rotuaari", "Kävelykatu", "Rotuaari on Oulun ydinkeskustan kävelykatu. Rotuaarin pallo on huomattavin maamerkki Rotuaarin läheisyydessä. Tiesitkö että nimi Rotuaari on saanut alkunsa vanhasta oululaisesta murresanasta trottoir joka tarkoitta ranskan kielen jalkakäytävää."), new Paikka(25.46268, 65.01463, "Kaupunginteatteri", "teatteri", "Oulun kaupunginteatteri", "Oulun kaupunginteatteri järjestää vuosittain noin 350–400 esitystä ja näistä 8 on ensi-iltoja. Oulun Teatteri on tunnettu vuodesta 1951 nimeltä Oulun Teatteri, tätä ennen sitä kutsuttiin Oulun Näyttämöksi.\n\nOulun Teatterin avulla opiskelijat voivat päästä nauttimaan sekä suomalaisesta että ulkomaalaisesta teatterista keskustan läheisyydessä.")]; // Ensimmäisen kohteen buttoniin toiminnallisuus
+
+var kohdeNimiButton = document.getElementById("kohdeNimiButton");
+kohdeNimiButton.addEventListener('click', function () {
+  document.getElementById("map").style.display = "none";
+  document.getElementById("kohteet").style.display = "none";
+  document.getElementById("esittely").style.display = "Block";
+
+  for (var i = 0; i < paikat.length; i++) {
+    if (paikat[i].nimi == this.innerText) {
+      document.getElementById("esittelyOtsikko").textContent = paikat[i].nimi;
+      document.getElementById("esittelyTeksti").textContent = paikat[i].kuvaus;
+      break;
+    }
+  }
+}, false); // Luodaan paikkojen perusteella paikkalistaus
+
+document.getElementById("kohdeNimiButton").innerHTML = paikat[0].nimi;
+document.getElementById("kohdeSelite").innerHTML = paikat[0].lyhytKuvaus;
+var kohdeRivi = document.getElementById("kohdeRivi");
+
+for (var i = 1; i < paikat.length; i++) {
+  var cloneRow = kohdeRivi.cloneNode(true);
+  var childs = cloneRow.childNodes;
+
+  for (var c = 0; c < childs.length; c++) {
+    var str = "" + childs[c].innerHTML;
+
+    if (str.includes(paikat[0].nimi)) {
+      childs[c].innerHTML = str.replace(paikat[0].nimi, paikat[i].nimi);
+    }
+
+    if (childs[c].textContent.match(paikat[0].lyhytKuvaus)) childs[c].textContent = paikat[i].lyhytKuvaus;
+  }
+
+  var buttons = cloneRow.getElementsByClassName("kohteetButton");
+  buttons[0].addEventListener('click', function () {
+    document.getElementById("map").style.display = "none";
+    document.getElementById("kohteet").style.display = "none";
+    document.getElementById("esittely").style.display = "Block";
+
+    for (var i = 0; i < paikat.length; i++) {
+      if (paikat[i].nimi == this.innerText) {
+        document.getElementById("esittelyOtsikko").textContent = paikat[i].nimi;
+        document.getElementById("esittelyTeksti").textContent = paikat[i].kuvaus;
+        break;
+      }
+    }
+  }, false);
+  document.getElementById("kohteet").appendChild(cloneRow);
+} // Luodaan pointit joita käytetään kartassa
+
 
 var pointit = [];
 
@@ -85959,7 +86002,6 @@ for (var i = 0; i < paikat.length; i++) {
   });
   point.setStyle(new _style.Style({
     image: new _style.Icon({
-      //color: colors[i],
       src: paikat[i].icon,
       scale: 0.2
     })
@@ -85995,7 +86037,8 @@ var popup = new _Overlay.default({
   stopEvent: false,
   offset: [0, -50]
 });
-map.addOverlay(popup); // display popup on click
+map.addOverlay(popup);
+var currentFeature = ''; // display popup on click
 
 map.on('click', function (evt) {
   var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
@@ -86004,23 +86047,44 @@ map.on('click', function (evt) {
 
   if (feature) {
     // Ensin vanha popup pois jos sellainen on
-    $(element).popover('dispose');
-    var coordinates = feature.getGeometry().getCoordinates();
-    popup.setPosition(coordinates);
-    $(element).popover({
-      placement: 'top',
-      html: true,
-      content: feature.get('name') + ": " + feature.get('description')
-    });
-    $(element).popover('show');
+    $(element).popover('dispose'); // Jos feature on sama kuin currentFeature, niin avataan paikan esittely
+    // ikonia on siis painettu kahdesti putkeen
+
+    if (currentFeature == feature.get('name')) {
+      document.getElementById("map").style.display = "none";
+      document.getElementById("kohteet").style.display = "none";
+      document.getElementById("esittely").style.display = "Block";
+
+      for (var i = 0; i < paikat.length; i++) {
+        if (paikat[i].nimi == currentFeature) {
+          document.getElementById("esittelyOtsikko").textContent = paikat[i].nimi;
+          document.getElementById("esittelyTeksti").textContent = paikat[i].kuvaus;
+          break;
+        }
+      }
+
+      currentFeature = '';
+    } else {
+      var coordinates = feature.getGeometry().getCoordinates();
+      popup.setPosition(coordinates);
+      $(element).popover({
+        placement: 'top',
+        html: true,
+        content: feature.get('name')
+      });
+      currentFeature = feature.get('name');
+      $(element).popover('show');
+    }
   } else {
     $(element).popover('dispose');
+    currentFeature = '';
   }
 }); // change mouse cursor when over marker
 
 map.on('pointermove', function (e) {
   if (e.dragging) {
     $(element).popover('dispose');
+    currentFeature = '';
     return;
   }
 
@@ -86034,16 +86098,22 @@ var showMapButton = document.getElementById('showMap');
 paikatButton.addEventListener('click', function () {
   document.getElementById("map").style.display = "none";
   document.getElementById("kohteet").style.display = "block";
+  document.getElementById("esittely").style.display = "none";
+  $(element).popover('dispose');
+  currentFeature = '';
 }, false);
 centerButton.addEventListener('click', function () {
   map.setView(new _View.default({
     center: defaultView.getCenter(),
     zoom: defaultView.getZoom()
   }));
+  $(element).popover('dispose');
+  currentFeature = '';
 }, false);
 showMapButton.addEventListener('click', function () {
   document.getElementById("map").style.display = "block";
   document.getElementById("kohteet").style.display = "none";
+  document.getElementById("esittely").style.display = "none";
 }, false);
 },{"ol/ol.css":"node_modules/ol/ol.css","ol/Feature":"node_modules/ol/Feature.js","ol/Map":"node_modules/ol/Map.js","ol/Overlay":"node_modules/ol/Overlay.js","ol/geom/Point":"node_modules/ol/geom/Point.js","ol/source/Vector":"node_modules/ol/source/Vector.js","ol/View":"node_modules/ol/View.js","ol/style":"node_modules/ol/style.js","ol/layer":"node_modules/ol/layer.js","ol/source/OSM":"node_modules/ol/source/OSM.js","ol/proj":"node_modules/ol/proj.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -86073,7 +86143,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51794" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50264" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
